@@ -5,8 +5,11 @@ async function buildRouter() {
     const matrix = await buildMatrix();
     const router = Express.Router();
 
-    router.get('/webhook', (req, res) => {
-        matrix.sendMessage('TEST');
+    router.post('/webhook', (req, res) => {
+        const events = req.body as Array<any>;
+        events.forEach((event) => {
+            matrix.sendMessage(event.description);
+        });
         res.sendStatus(200);
     });
 

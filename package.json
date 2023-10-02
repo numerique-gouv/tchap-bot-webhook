@@ -6,7 +6,8 @@
     },
     "scripts": {
         "startDev": "nodemon",
-        "build": "tsc",
+        "buildServer": "tsc",
+        "build": "npm run buildServer && cd src/client && npm i && npm run build",
         "start": "node dist/app.js"
     },
     "dependencies": {

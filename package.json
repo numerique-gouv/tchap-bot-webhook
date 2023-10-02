@@ -1,5 +1,6 @@
 {
     "devDependencies": {
+        "@types/node": "^20.8.0",
         "nodemon": "^2.0.20",
         "ts-node": "^10.9.1",
         "typescript": "^5.2.2"
@@ -8,13 +9,20 @@
         "startDev": "nodemon",
         "buildServer": "tsc",
         "build": "npm run buildServer && cd src/client && npm i && npm run build",
-        "start": "node dist/app.js"
+        "start": "node dist/app.js",
+        "migration:generate": "npm run buildServer && typeorm migration:generate -d dist/dataSource.js src/migration/$npm_config_name",
+        "migration:run": "npm run buildServer && typeorm migration:run -d dist/dataSource.js",
+        "migration:rollback": "npm run buildServer && typeorm migration:revert -d dist/dataSource.js"
     },
     "dependencies": {
         "@types/express": "^4.17.18",
         "body-parser": "^1.20.2",
         "dotenv": "^16.3.1",
         "express": "^4.18.2",
-        "matrix-bot-sdk": "^0.6.6"
+        "matrix-bot-sdk": "^0.6.6",
+        "pg": "^8.11.3",
+        "pg-connection-string": "^2.6.2",
+        "reflect-metadata": "^0.1.13",
+        "typeorm": "^0.3.17"
     }
 }

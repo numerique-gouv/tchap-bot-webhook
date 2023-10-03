@@ -8,7 +8,9 @@ async function buildRouter(dataSource: DataSource) {
 
     const alertController = buildAlertController(dataSource);
 
-    router.post('/webhook', buildController(alertController.handleUpdownIoWebhook));
+    router.post('/webhook-updownio', buildController(alertController.handleUpdownIoWebhook));
+    router.post('/alerts', buildController(alertController.createAlert));
+    router.get('/alerts', buildController(alertController.getAlerts));
 
     return router;
 }

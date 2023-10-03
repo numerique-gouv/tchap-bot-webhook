@@ -1,12 +1,14 @@
 import { DataSource, In } from 'typeorm';
 import { buildMatrix } from '../../lib/matrix';
-import { updownIoEventType } from './types';
+import { alertDtoType, updownIoEventType } from './types';
 import { Alert } from './Alert.entity';
 
 function buildAlertService(dataSource: DataSource) {
     const alertRepository = dataSource.getRepository(Alert);
 
     return {
+        createAlert,
+        getAlerts,
         handleUpdownIoWebhook,
     };
 
@@ -27,6 +29,17 @@ function buildAlertService(dataSource: DataSource) {
             }
         });
         return true;
+    }
+
+    async function getAlerts() {
+        return alertRepository.find();
+    }
+
+    async function createAlert(alertDto: alertDtoType) {
+        const alert = new Alert();
+        alert.roomId = alertDto.roomId;
+        alert.url = alertDto.url;
+        return alertRepository.save(alert);
     }
 }
 

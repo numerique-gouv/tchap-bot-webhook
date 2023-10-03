@@ -16,7 +16,7 @@ async function runApp() {
     }
 
     const app = Express();
-    const router = await buildRouter();
+    const router = await buildRouter(dataSource);
 
     app.use('/api', bodyParser.json(), router);
 

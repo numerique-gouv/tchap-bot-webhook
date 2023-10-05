@@ -5,6 +5,11 @@ type updownIoEventType = Array<{
     check: { url: string };
 }>;
 
+type genericEventType = {
+    message: string;
+    roomId: string;
+};
+
 type alertDtoType = Pick<Alert, 'roomId' | 'url'>;
 
-export type { updownIoEventType, alertDtoType };
+export type { updownIoEventType, alertDtoType, genericEventType };

@@ -1,6 +1,6 @@
 import { DataSource, In } from 'typeorm';
 import { buildMatrix } from '../../lib/matrix';
-import { alertDtoType, updownIoEventType } from './types';
+import { alertDtoType, genericEventType, updownIoEventType } from './types';
 import { Alert } from './Alert.entity';
 
 function buildAlertService(dataSource: DataSource) {
@@ -10,7 +10,14 @@ function buildAlertService(dataSource: DataSource) {
         createAlert,
         getAlerts,
         handleUpdownIoWebhook,
+        handleWebhook,
     };
+
+    async function handleWebhook(event: genericEventType) {
+        const matrix = await buildMatrix();
+        matrix.sendMessage(event.message, event.roomId);
+        return true;
+    }
 
     async function handleUpdownIoWebhook(events: updownIoEventType) {
         const matrix = await buildMatrix();

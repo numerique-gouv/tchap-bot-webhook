@@ -15,7 +15,7 @@ function buildAlertService(dataSource: DataSource) {
 
     async function handleWebhook(event: genericEventType) {
         const matrix = await buildMatrix();
-        matrix.sendMessage(event.message, event.roomId);
+        await matrix.sendMessage(event.message, event.roomId);
         return true;
     }
 
@@ -28,13 +28,14 @@ function buildAlertService(dataSource: DataSource) {
             return { ...acc, [alert.url]: alert };
         }, {} as Record<string, Alert>);
 
-        events.forEach((event) => {
+        for (const event of events) {
             const alert = mappedAlerts[event.check.url];
-            matrix.sendMessage(event.description);
+            await matrix.sendMessage(event.description);
             if (alert) {
-                matrix.sendMessage(event.description, alert.roomId);
+                await matrix.sendMessage(event.description, alert.roomId);
             }
-        });
+        }
+
         return true;
     }
 

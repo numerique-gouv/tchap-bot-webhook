@@ -13,10 +13,21 @@ async function buildRouter(dataSource: DataSource) {
     router.post(
         '/webhook',
         buildController(alertController.handleWebhook, {
-            schema: Joi.object({ roomId: Joi.string(), message: Joi.string() }),
+            schema: Joi.object({
+                roomId: Joi.string().required(),
+                message: Joi.string().required(),
+            }),
         }),
     );
-    router.post('/alerts', buildController(alertController.createAlert));
+    router.post(
+        '/alerts',
+        buildController(alertController.createAlert, {
+            schema: Joi.object({
+                roomId: Joi.string().required(),
+                url: Joi.string().required(),
+            }),
+        }),
+    );
     router.get('/alerts', buildController(alertController.getAlerts));
 
     return router;

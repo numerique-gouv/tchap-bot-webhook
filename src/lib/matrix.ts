@@ -18,6 +18,4 @@ async function buildMatrix() {
     }
 }
 
-buildMatrix;
-
 export { buildMatrix };

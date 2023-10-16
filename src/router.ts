@@ -29,6 +29,10 @@ async function buildRouter(dataSource: DataSource) {
         }),
     );
     router.get('/alerts', buildController(alertController.getAlerts));
+    router.get(
+        '/health',
+        buildController(() => true),
+    );
 
     return router;
 }

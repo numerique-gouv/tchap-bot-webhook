@@ -7,8 +7,7 @@
     },
     "scripts": {
         "startDev": "nodemon",
-        "buildServer": "tsc",
-        "build": "npm run buildServer && cd src/client && npm i && npm run build",
+        "build": "tsc",
         "start": "node dist/app.js",
         "migration:generate": "npm run buildServer && typeorm migration:generate -d dist/dataSource.js src/migration/$npm_config_name",
         "migration:run": "npm run buildServer && typeorm migration:run -d dist/dataSource.js",

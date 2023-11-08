@@ -1,5 +1,5 @@
 import { DataSource, In } from 'typeorm';
-import { buildMatrix } from '../../lib/matrix';
+import { matrix } from '../../lib/matrix';
 import { alertDtoType, genericEventType, updownIoEventType } from './types';
 import { Alert } from './Alert.entity';
 
@@ -14,15 +14,12 @@ function buildAlertService(dataSource: DataSource) {
     };
 
     async function handleWebhook(event: genericEventType) {
-        const matrix = await buildMatrix();
         await matrix.sendMessage(event.message, event.roomId);
         return true;
     }
 
     async function handleUpdownIoWebhook(events: updownIoEventType) {
-        const matrix = await buildMatrix();
         const urls = events.map((event) => event.check.url);
-        console.log('URLS: ', urls.join(', '));
         const alerts = await alertRepository.findBy({ url: In(urls) });
         const mappedAlerts = alerts.reduce((acc, alert) => {
             return { ...acc, [alert.url]: alert };

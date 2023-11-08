@@ -1,15 +1,24 @@
-import Express, { Response } from 'express';
+import Express from 'express';
 import bodyParser from 'body-parser';
 import { buildRouter } from './router';
 import { config } from './config';
 import { dataSource } from './dataSource';
+import { matrix } from './lib/matrix';
 
 async function runApp() {
     try {
         console.log('Connexion à la db...');
         await dataSource.initialize();
-        console.log('Connexion réussie !');
+        console.log('Connexion à la db réussie !');
         await dataSource.runMigrations();
+    } catch (error) {
+        console.error(error);
+    }
+
+    try {
+        console.log(`Initialisation du client Matrix...`);
+        await matrix.initialize();
+        console.log(`Initialisation du client Matrix réussie !`);
     } catch (error) {
         console.error(error);
     }

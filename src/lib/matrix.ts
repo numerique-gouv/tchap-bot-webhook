@@ -1,16 +1,21 @@
-import { MatrixAuth } from 'matrix-bot-sdk';
+import { MatrixAuth, MatrixClient } from 'matrix-bot-sdk';
 import { config } from '../config';
 
-async function buildMatrix() {
+function buildMatrix() {
     const auth = new MatrixAuth(config.MATRIX_SERVER_URL);
-    const client = await auth.passwordLogin(config.TCHAP_USERNAME, config.TCHAP_PASSWORD);
+    let client: MatrixClient | null = null;
 
-    const roomId = config.DEFAULT_ROOM_ID;
-    await client.start();
+    return { initialize, sendMessage };
 
-    return { sendMessage };
+    async function initialize() {
+        client = await auth.passwordLogin(config.TCHAP_USERNAME, config.TCHAP_PASSWORD);
+        return client.start();
+    }
 
     function sendMessage(message: string, roomId?: string) {
+        if (!client) {
+            throw new Error(`Client not initialized ; could not send message`);
+        }
         return client.sendMessage(roomId || config.DEFAULT_ROOM_ID, {
             body: message,
             msgtype: 'm.text',
@@ -18,4 +23,6 @@ async function buildMatrix() {
     }
 }
 
-export { buildMatrix };
+const matrix = buildMatrix();
+
+export { matrix };

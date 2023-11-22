@@ -4,18 +4,34 @@ import { alertDtoType, genericEventType, updownIoEventType } from './types';
 
 function buildAlertController(dataSource: DataSource) {
     const alertService = buildAlertService(dataSource);
-    return { createAlert, handleUpdownIoWebhook, getAlerts, handleWebhook };
+    return {
+        createAlert,
+        handleUpdownIoWebhook,
+        getAlerts,
+        handleWebhook,
+        handleUpdownIoWebhookWithRoomId,
+    };
 
-    function handleUpdownIoWebhook(params: updownIoEventType) {
-        return alertService.handleUpdownIoWebhook(params);
+    function handleUpdownIoWebhookWithRoomId(params: {
+        body: updownIoEventType;
+        urlParams: { tchapRoomId: string };
+    }) {
+        return alertService.handleUpdownIoWebhookForRoomId(
+            params.body,
+            params.urlParams.tchapRoomId,
+        );
     }
 
-    function handleWebhook(params: genericEventType) {
-        return alertService.handleWebhook(params);
+    function handleUpdownIoWebhook(params: { body: updownIoEventType }) {
+        return alertService.handleUpdownIoWebhook(params.body);
     }
 
-    function createAlert(params: alertDtoType) {
-        return alertService.createAlert(params);
+    function handleWebhook(params: { body: genericEventType }) {
+        return alertService.handleWebhook(params.body);
+    }
+
+    function createAlert(params: { body: alertDtoType }) {
+        return alertService.createAlert(params.body);
     }
 
     function getAlerts() {

@@ -9,6 +9,7 @@ function buildAlertService(dataSource: DataSource) {
     return {
         createAlert,
         getAlerts,
+        handleUpdownIoWebhookForRoomId,
         handleUpdownIoWebhook,
         handleWebhook,
     };
@@ -16,6 +17,13 @@ function buildAlertService(dataSource: DataSource) {
     async function handleWebhook(event: genericEventType) {
         await matrix.sendMessage(event.message, event.roomId);
         return true;
+    }
+
+    async function handleUpdownIoWebhookForRoomId(events: updownIoEventType, roomId: string) {
+        for (const event of events) {
+            await matrix.sendMessage(event.description);
+            await matrix.sendMessage(event.description, roomId);
+        }
     }
 
     async function handleUpdownIoWebhook(events: updownIoEventType) {

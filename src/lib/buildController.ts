@@ -4,8 +4,8 @@ import Joi from 'joi';
 
 export { buildController };
 
-function buildController<bodyT>(
-    controller: (body: bodyT) => any,
+function buildController<paramsT extends Record<string, string>, bodyT>(
+    controller: (params: { urlParams: paramsT; body: bodyT }) => any | Promise<any>,
     options?: {
         schema?: Joi.Schema;
         checkAuthorization?: (headers: Record<string, string>, body: Object) => boolean;
@@ -31,7 +31,10 @@ function buildController<bodyT>(
         }
 
         try {
-            const result = await controller(req.body);
+            const result = await controller({
+                urlParams: req.params as paramsT,
+                body: req.body,
+            });
             res.set('Content-Type', 'application/json');
             if (result === undefined) {
                 res.send({});

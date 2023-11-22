@@ -11,6 +11,10 @@ async function buildRouter(dataSource: DataSource) {
 
     router.post('/webhook-updownio', buildController(alertController.handleUpdownIoWebhook));
     router.post(
+        '/webhook-updownio/:tchapRoomId',
+        buildController(alertController.handleUpdownIoWebhookWithRoomId),
+    );
+    router.post(
         '/webhook',
         buildController(alertController.handleWebhook, {
             schema: Joi.object({

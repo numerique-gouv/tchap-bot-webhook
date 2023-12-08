@@ -20,10 +20,15 @@ function buildAlertService(dataSource: DataSource) {
     }
 
     async function handleUpdownIoWebhookForRoomId(events: updownIoEventType, roomId: string) {
+        console.log(`Received ${events.length} events :`);
+        console.log(`Room Id: ${roomId}`);
+
         for (const event of events) {
+            console.log('Event: ', event.description);
             await matrix.sendMessage(event.description);
             await matrix.sendMessage(event.description, roomId);
         }
+        console.log('===');
     }
 
     async function handleUpdownIoWebhook(events: updownIoEventType) {

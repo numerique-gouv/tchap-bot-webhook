@@ -9,7 +9,7 @@ async function buildRouter(dataSource: DataSource) {
 
     const alertController = buildAlertController(dataSource);
 
-    router.post('/webhook-updownio', buildController(alertController.handleUpdownIoWebhook));
+    // router.post('/webhook-updownio', buildController(alertController.handleUpdownIoWebhook));
     router.post(
         '/webhook-updownio/:tchapRoomId',
         buildController(alertController.handleUpdownIoWebhookWithRoomId),

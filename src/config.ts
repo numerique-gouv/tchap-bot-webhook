@@ -15,6 +15,10 @@ if (process.env.DATABASE_URL) {
 }
 
 const config = {
+    MATRIX_DOMAIN: process.env.MATRIX_DOMAIN || '',
+    INFRA_OPI_API_KEY: process.env.INFRA_OPI_API_KEY || '',
+    INFRA_OPI_BASE_URL: process.env.INFRA_OPI_BASE_URL || '',
+    INFRA_OPI_ROOM_ID: process.env.INFRA_OPI_ROOM_ID || '',
     MATRIX_SERVER_URL: process.env.MATRIX_SERVER_URL || '',
     DEFAULT_ROOM_ID: process.env.DEFAULT_ROOM_ID || '',
     TCHAP_USERNAME: process.env.TCHAP_USERNAME || '',

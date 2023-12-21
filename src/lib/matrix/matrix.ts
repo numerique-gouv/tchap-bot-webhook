@@ -1,5 +1,6 @@
 import { MatrixAuth, MatrixClient } from 'matrix-bot-sdk';
-import { config } from '../config';
+import { config } from '../../config';
+import { eventEmitter } from '../events';
 
 function buildMatrix() {
     const auth = new MatrixAuth(config.MATRIX_SERVER_URL);
@@ -9,7 +10,18 @@ function buildMatrix() {
 
     async function initialize() {
         client = await auth.passwordLogin(config.TCHAP_USERNAME, config.TCHAP_PASSWORD);
-        return client.start();
+
+        await client.start();
+        client.on('room.message', (roomId: string, event: any) => {
+            if (!event['content']?.['msgtype']) return;
+            const body = {
+                roomId,
+                sender: event.sender as string,
+                message: event.content.body,
+                messageId: event.event_id,
+            };
+            eventEmitter.emit('MESSAGE_RECEIVED', body);
+        });
     }
 
     function sendMessage(message: string, roomId?: string) {

@@ -1,7 +1,9 @@
 {
     "devDependencies": {
+        "@types/jest": "^29.5.11",
         "@types/node": "^20.8.0",
         "nodemon": "^2.0.20",
+        "ts-jest": "^29.0.3",
         "ts-node": "^10.9.1",
         "typescript": "^5.2.2"
     },
@@ -9,12 +11,15 @@
         "startDev": "nodemon",
         "build": "tsc",
         "start": "node dist/app.js",
-        "migration:generate": "npm run buildServer && typeorm migration:generate -d dist/dataSource.js src/migration/$npm_config_name",
-        "migration:run": "npm run buildServer && typeorm migration:run -d dist/dataSource.js",
-        "migration:rollback": "npm run buildServer && typeorm migration:revert -d dist/dataSource.js"
+        "test": "jest",
+        "migration:generate": "npm run build && typeorm migration:generate -d dist/dataSource.js src/migration/$npm_config_name",
+        "migration:run": "npm run build && typeorm migration:run -d dist/dataSource.js",
+        "migration:rollback": "npm run build && typeorm migration:revert -d dist/dataSource.js",
+        "typeorm": "typeorm-ts-node-esm"
     },
     "dependencies": {
         "@types/express": "^4.17.18",
+        "axios": "^1.6.2",
         "body-parser": "^1.20.2",
         "dotenv": "^16.3.1",
         "express": "^4.18.2",

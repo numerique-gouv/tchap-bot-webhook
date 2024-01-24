@@ -36,35 +36,28 @@ function buildInfraBotListener(dataSource: DataSource): listenerType {
             }
             try {
                 const parsedCommand = parseCommand(data.message);
-                console.log('parsedCommand', parsedCommand);
 
                 try {
                     await habilitationService.assertUserIsAuthorizedToPerform(data.sender);
 
-                    const URL = infraApiCommandMapping[parsedCommand.kind];
-                    console.log('URL', URL);
+                    const { url, method, successMessage } =
+                        infraApiCommandMapping[parsedCommand.kind];
                     try {
-                        const response = await axios.post(URL, parsedCommand.parameters, {
+                        await axios[method](url, parsedCommand.parameters, {
                             headers: { 'Api-Key': config.INFRA_OPI_API_KEY },
                         });
-                        console.log('SUCCESS');
-                        console.log(response);
                         await messageTreatmentRepository.insert({
                             kind: 'handled',
                             messageExternalId: data.messageId,
                         });
-                        matrix.sendMessage(
-                            `Votre application a bien été créée !`,
-                            config.INFRA_OPI_ROOM_ID,
-                        );
-                        console.log(`Application created`);
+                        matrix.sendMessage(successMessage, config.INFRA_OPI_ROOM_ID);
                     } catch (error) {
                         await messageTreatmentRepository.insert({
                             kind: 'error',
                             messageExternalId: data.messageId,
                         });
                         matrix.sendMessage(
-                            `Une erreur est survenue lors de la création de votre application`,
+                            `Une erreur est survenue lors de l'opération.`,
                             config.INFRA_OPI_ROOM_ID,
                         );
                         console.error(error);

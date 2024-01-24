@@ -9,9 +9,27 @@ describe('parseCommand', () => {
 
         expect(parsedCommand).toEqual({
             kind: 'scalingo:create',
-            appName: 'app-name',
-            shouldBeSecNumCloud: true,
-            collaboratorToInvite: 'user@beta.gouv.fr',
+            parameters: {
+                appName: 'app-name',
+                shouldBeSecNumCloud: true,
+                collaboratorToInvite: 'user@beta.gouv.fr',
+            },
+        });
+    });
+
+    it('should parse the command if scalingo:rename', () => {
+        const command =
+            'scalingo:rename previousAppName:previous-app-name isSecNumCloud:true newAppName:new-app-name';
+
+        const parsedCommand = parseCommand(command);
+
+        expect(parsedCommand).toEqual({
+            kind: 'scalingo:rename',
+            parameters: {
+                previousAppName: 'previous-app-name',
+                isSecNumCloud: true,
+                newAppName: 'new-app-name',
+            },
         });
     });
 });

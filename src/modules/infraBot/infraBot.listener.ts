@@ -6,6 +6,7 @@ import { matrix } from '../../lib/matrix';
 import { config } from '../../config';
 import { buildHabilitationService } from '../habilitation';
 import axios from 'axios';
+import { infraApiCommandMapping } from './constants';
 
 type messageReceivedDataType = {
     roomId: string;
@@ -35,22 +36,17 @@ function buildInfraBotListener(dataSource: DataSource): listenerType {
             }
             try {
                 const parsedCommand = parseCommand(data.message);
-                console.log(parsedCommand);
+                console.log('parsedCommand', parsedCommand);
 
                 try {
                     await habilitationService.assertUserIsAuthorizedToPerform(data.sender);
 
-                    const INFRA_OPI_SCALINGO_CREATE_URL = `${config.INFRA_OPI_BASE_URL}/scalingo/apps`;
+                    const URL = infraApiCommandMapping[parsedCommand.kind];
+                    console.log('URL', URL);
                     try {
-                        const response = await axios.post(
-                            INFRA_OPI_SCALINGO_CREATE_URL,
-                            {
-                                appName: parsedCommand.appName,
-                                shouldBeSecNumCloud: parsedCommand.shouldBeSecNumCloud,
-                                collaboratorToInvite: parsedCommand.collaboratorToInvite,
-                            },
-                            { headers: { 'Api-Key': config.INFRA_OPI_API_KEY } },
-                        );
+                        const response = await axios.post(URL, parsedCommand.parameters, {
+                            headers: { 'Api-Key': config.INFRA_OPI_API_KEY },
+                        });
                         console.log('SUCCESS');
                         console.log(response);
                         await messageTreatmentRepository.insert({

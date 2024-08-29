@@ -35,6 +35,7 @@ async function buildRouter(dataSource: DataSource) {
     );
     router.get('/alerts', buildController(alertController.getAlerts));
     router.post('/habilitations', buildController(habilitationController.createHabilitation));
+    router.get('/habilitations', buildController(habilitationController.getHabilitations));
     router.get(
         '/health',
         buildController(() => true),

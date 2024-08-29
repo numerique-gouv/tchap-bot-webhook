@@ -6,6 +6,7 @@ function buildHabilitationService(dataSource: DataSource) {
     return {
         assertUserIsAuthorizedToPerform,
         createHabilitation,
+        getHabilitations,
     };
 
     async function assertUserIsAuthorizedToPerform(userId: string) {
@@ -14,6 +15,11 @@ function buildHabilitationService(dataSource: DataSource) {
 
     async function createHabilitation(userId: Habilitation['userId']) {
         return habilitationRepository.insert({ userId });
+    }
+
+    async function getHabilitations() {
+        const habilitations = await habilitationRepository.find({});
+        return habilitations.map((habilitation) => habilitation.userId);
     }
 }
 

@@ -22,11 +22,14 @@ function parseCommand(command: string): parsedCommandType {
                     case 'collaboratorToInvite':
                         parsedCommand.parameters['collaboratorToInvite'] = value;
                         break;
+                    case 'isSecNumCloud':
+                        parsedCommand.parameters['shouldBeSecNumCloud'] = value === 'true';
+                        break;
                     case 'shouldBeSecNumCloud':
                         parsedCommand.parameters['shouldBeSecNumCloud'] = value === 'true';
                         break;
                     default:
-                        console.error(`Unknown parameter : ${key}:${value}`);
+                        throw new Error(`Unknown parameter : ${key}:${value}`);
                 }
             }
             break;

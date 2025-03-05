@@ -28,10 +28,7 @@ function buildMatrix() {
         if (!client) {
             throw new Error(`Client not initialized ; could not send message`);
         }
-        return client.sendMessage(roomId || config.DEFAULT_ROOM_ID, {
-            body: message,
-            msgtype: 'm.text',
-        });
+        return client.sendHtmlText(roomId || config.DEFAULT_ROOM_ID, message);
     }
 }
 
